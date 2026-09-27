@@ -1,0 +1,20 @@
+[build]
+  # This repo is a monorepo — the actual frontend package lives in /frontend,
+  # and the Vite project root inside it is /frontend/editor.
+  base = "frontend"
+  command = "npm ci && npx tsx editor/scripts/setup-env.mts && node editor/scripts/generate-icons.js && node editor/scripts/generate-og-metadata.mjs && npx vite build editor --mode core"
+  publish = "editor/dist"
+
+[build.environment]
+  NODE_VERSION = "20"
+  # If your Java backend is hosted separately, set its public URL here
+  # (or in Netlify's UI under Site settings > Environment variables) and
+  # make sure the backend allows CORS from your Netlify domain.
+  # VITE_API_BASE_URL = "https://your-backend-host.example.com"
+
+# Stirling PDF's editor is a client-side-routed React app (react-router-dom),
+# so every path needs to fall back to index.html or deep links will 404.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
